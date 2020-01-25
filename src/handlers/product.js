@@ -50,5 +50,14 @@ module.exports = {
 		} catch (err) {
 			return h.response({ error: 'Erro ao tentar remover o produto.' }).code(400);
 		}
+	},
+	async update(request, h) {
+		try {
+			const product = await ProductRepository.update(request.params.id, request.payload);
+			return h.response({ data: transformer(product) });
+			
+		} catch (err) {
+			return h.response({ error: 'Erro ao atualizar o produto.' }).code(400);
+		}
 	}
 }

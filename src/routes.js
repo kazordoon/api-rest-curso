@@ -25,5 +25,10 @@ module.exports = [
     options: {
       cors: true
     }
+  },
+  {
+    method: 'PUT',
+    path: `${BASE_URL}/{id}`,
+    handler: productHandler.update
   }
 ]

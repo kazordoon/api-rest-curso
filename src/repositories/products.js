@@ -12,5 +12,8 @@ module.exports = {
   },
   async find(id) {
     return await ProductModel.findById(id);
+  },
+  async update(id, payload) {
+    return await ProductModel.findByIdAndUpdate(id, payload, { new: true });
   }
 };
