@@ -1,2 +1,7 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27018/ecommerce-api', {useNewUrlParser: true});
+
+module.exports = url => {
+  mongoose.connect(url, { useNewUrlParser: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('Mongoose Error:\n' + err));
+}

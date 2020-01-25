@@ -1,4 +1,6 @@
-require('./services/mongo');
+require('dotenv').config();
+
+require('./services/mongo')(process.env.MONGODB_URL);
 
 const Hapi = require('@hapi/hapi');
 const routes = require('./routes');
