@@ -1,41 +1,54 @@
 const ProductRepository = require('../repositories/products');
 
-const transformer = product => ({
-  type: 'products',
-  id: product.id,
-  attributes: {
-    name: product.name,
-    price: product.price,
-  },
-  links: {
-    self: `/api/v1/products/${product.id}`
-  }
-});
-
-const getAll = async () => {
-  const products = await ProductRepository.getAll();
-  return { data: products.map(transformer) };
-};
-
-const find = async (req) => {
-  const product = await ProductRepository.find(req.params.id);
-  return { data: transformer(product) };
-};
-
-const save = async (req, h) => {
-  const product = await ProductRepository.save(req.payload);
-
-  return h.response(transformer(product)).code(201);
-};
-
-const remove = async (req, h) => {
-  await ProductRepository.remove(req.params.id);
-  return h.response().code(204);
+function transformer({ id, name, price }) {
+	return {
+		type: 'products',
+		id,
+		attributes: {
+			name,
+			price
+		},
+		links: {
+			self: `/api/v1/products/${id}`
+		}
+	}
 }
 
 module.exports = {
-  getAll,
-  save,
-  remove,
-  find
-};
+	async getAll(request, h) {
+		try {
+			const products = await ProductRepository.getAll();
+      return h.response({ data: products.map(transformer) });
+      
+		} catch (err) {
+			return h.response({ error: 'Erro ao listar todos os produtos.' }).code(500);
+		}
+	},
+	async find(request, h) {
+		try {
+			const product = await ProductRepository.find(request.params.id);
+      return h.response({ data: transformer(product) });
+      
+		} catch (err) {
+			return h.response({ error: 'Erro ao encontrar o produto.' }).code(400);
+		}
+	},
+	async save(request, h) {
+		try {
+			const product = await ProductRepository.save(request.payload);
+      return h.response({ data: transformer(product) }).code(201);
+      
+		} catch (err) {
+			return h.response({ error: 'Erro ao criar um novo produto.' }).code(400);
+		}
+	},
+	async remove(request, h) {
+		try {
+			await ProductRepository.remove(request.params.id);
+      return h.response().code(204);
+      
+		} catch (err) {
+			return h.response({ error: 'Erro ao tentar remover o produto.' }).code(400);
+		}
+	}
+}

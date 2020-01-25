@@ -1,26 +1,16 @@
 const ProductModel = require('../models/product');
 
-const getAll = async () => await ProductModel.find({});
-
-const find = async id =>  await ProductModel.findById(id);
-
-const save = async (payload) => {
-  const { name, price } = payload;
-
-  const product = new ProductModel;
-  product.name = name;
-  product.price = price;
-
-  await product.save();
-
-  return product;
-};
-
-const remove = async id => await ProductModel.findOneAndDelete({ _id: id });
-
 module.exports = {
-  getAll,
-  save,
-  remove,
-  find
+  async getAll() {
+    return await ProductModel.find()
+  },
+  async save(payload) {
+    return await ProductModel.create(payload);
+  },
+  async remove(id) {
+    return await ProductModel.findByIdAndDelete(id);
+  },
+  async find(id) {
+    return await ProductModel.findById(id);
+  }
 };

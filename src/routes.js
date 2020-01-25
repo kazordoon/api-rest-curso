@@ -1,24 +1,26 @@
 const productHandler = require('./handlers/product');
 
+const BASE_URL = '/api/v1/products';
+
 module.exports = [
   {
     method: 'GET',
-    path: '/api/v1/products',
+    path: BASE_URL,
     handler: productHandler.getAll
   },
   {
     method: 'GET',
-    path: '/api/v1/products/{id}',
+    path: `${BASE_URL}/{id}`,
     handler: productHandler.find
   },
   {
     method: 'POST',
-    path: '/api/v1/products',
+    path: BASE_URL,
     handler: productHandler.save
   },
   {
     method: 'DELETE',
-    path: '/api/v1/products/{id}',
+    path: `${BASE_URL}/{id}`,
     handler: productHandler.remove,
     options: {
       cors: true
